@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.git/
+qdrant_storage/
+postgres_data/
+*.db
+*.png
+*.jpg
+*.jpeg

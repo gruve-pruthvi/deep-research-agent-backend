@@ -1,23 +1,55 @@
 services:
+
+  # ── Vector store ──────────────────────────────────────────────────────────
   qdrant:
     image: qdrant/qdrant
     container_name: qdrant
     ports:
-      - "6333:6333" # REST API port
-      - "6334:6334" # gRPC port
+      - "6333:6333"   # REST API
+      - "6334:6334"   # gRPC
     volumes:
       - ./qdrant_storage:/qdrant/storage
     restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:6333/healthz || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
+  # ── Relational database ───────────────────────────────────────────────────
   postgres:
     image: postgres:16
     container_name: postgres
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
     ports:
       - "5432:5432"
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
     restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ── API server ────────────────────────────────────────────────────────────
+  api:
+    build: .
+    container_name: deep_research_api
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env          # Supplies OPENAI_API_KEY, GOOGLE_API_KEY, TAVILY_API_KEY, etc.
+    environment:
+      # Override infrastructure URLs to use Docker service names instead of localhost.
+      QDRANT_URL: http://qdrant:6333
+      POSTGRES_HOST: postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+    restart: on-failure
