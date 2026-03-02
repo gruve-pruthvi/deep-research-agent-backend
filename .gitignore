@@ -1,0 +1,25 @@
+.env
+.venv
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Local databases and storage
+research_runs.db
+postgres_data/
+qdrant_storage/
+
+# OS/editor noise
+.DS_Store
+.idea/
+.vscode/
+
+# Logs
+*.log
+
+# Local screenshots
+Screenshot*.png

@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+langchain-openai
+langchain-core
+langgraph
+qdrant-client
+httpx
+langchain-text-splitters
+python-dotenv
+psycopg[binary]
+ddgs
+pymupdf
+playwright
