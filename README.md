@@ -10,7 +10,7 @@ FastAPI + LangGraph backend for streaming chat and deep research orchestration.
 |-----------|------------------|
 | API framework | FastAPI + Uvicorn |
 | Orchestration | LangGraph, LangChain |
-| LLMs | OpenAI (chat, vision, embeddings) — tiered orchestrator / worker |
+| LLMs | OpenAI (chat, embeddings) + Gemini (vision) |
 | Vector store | Qdrant |
 | Relational DB | Postgres (psycopg) |
 | Search | Tavily, DuckDuckGo (`ddgs`), Wikipedia |
@@ -46,6 +46,7 @@ pip install -r requirements.txt
 # Required
 OPENAI_API_KEY=...
 TAVILY_API_KEY=...
+GOOGLE_API_KEY=...
 
 # Infrastructure
 QDRANT_URL=http://localhost:6333
@@ -58,6 +59,8 @@ POSTGRES_DB=postgres
 # Model tiers
 ORCHESTRATOR_MODEL=gpt-4o          # high-stakes stages: plan, analyst, critic, verifier, writer
 WORKER_MODEL=gpt-4o-mini           # bulk stages: researchers, scoring, gap analysis
+VISION_MODEL=gemini-2.0-flash      # image understanding (Gemini)
+FALLBACK_VISION_MODEL=gpt-4o-mini  # used only when GOOGLE_API_KEY is missing
 
 # Optional features
 ENABLE_PLAYWRIGHT=false            # JS-rendered page extraction

@@ -3,6 +3,7 @@ uvicorn
 langchain-openai
 langchain-core
 langgraph
+langchain-google-genai
 qdrant-client
 httpx
 langchain-text-splitters
